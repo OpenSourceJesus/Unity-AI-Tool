@@ -17,7 +17,13 @@ public class GatherData : MonoBehaviour
 		foreach (string csFilePath in SystemExtensions.GetAllFilePathsInFolder(Application.dataPath, ".cs"))
 			data += "File name: " + csFilePath.Substring(csFilePath.LastIndexOf('/') + 1) + "\nFile contents:'''" + File.ReadAllText(csFilePath) + "'''\n";
 		data += ERRORS_PREFIX + '\n';
+#if UNITY_EDITOR_WIN
+		string logPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\Unity\Editor\Editor.log";
+#elif UNITY_EDITOR_OSX
+		string logPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "/Library/Logs/Unity/Editor.log";
+#else
 		string logPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "/.config/unity3d/Editor.log";
+#endif
 		string[] logLines = File.ReadAllLines(logPath);
 		List<string> logLines_ = new List<string>(logLines);
 		int lineIdx = 0;
